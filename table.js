@@ -1,6 +1,6 @@
 /* Th of Table */
 let th_list = {
-  N: "#",
+  "#": "#",
   name: "Name",
   email: "Email",
   balance: "Balance"
@@ -52,33 +52,66 @@ const users = [
 /* Create Fragment */
 let headerTable = document.createDocumentFragment();
 
+/* Create Wrap for table */
+let wrapTableBody = document.createElement("div");
+headerTable.appendChild(wrapTableBody);
+wrapTableBody.id = "wrapTableBody";
+
 /* Create a head of table */
 let table = document.createElement("table");
-headerTable.appendChild(table);
+wrapTableBody.appendChild(table);
 let trHeader = document.createElement("tr");
+trHeader.classList.add("trHeader");
 table.appendChild(trHeader);
-for (let i = 0; i < Object.keys(th_list).length; i++) {
-  let th = document.createElement("th");
-  th.textContent = Object.keys(th_list)[i];
-  trHeader.appendChild(th);
+TableHeader();
+function TableHeader() {
+  for (let i = 0; i < Object.keys(th_list).length; i++) {
+    let th = document.createElement("th");
+    th.textContent = Object.keys(th_list)[i];
+    if (Object.keys(th_list)[i] == "balance") {
+      th.innerHTML =
+        'balance<button id="sordDown">&darr;</button><button id="sordUp">&uarr;</button>';
+    }
+    th.classList.add("colum_num_" + i);
+    trHeader.appendChild(th);
+  }
 }
 let keyObjList = Object.keys(th_list);
 
 /* Create the body of talbe */
-for (let i = 0; i < users.length; i++) {
-  let trBody = document.createElement("tr");
-  for (let z = 0; z < Object.keys(th_list).length; z++) {
-    let currentUser = users[i];
-    let th = document.createElement("th");
-    console.log(currentUser["name"]);
-    th.textContent = currentUser[keyObjList[z]];
-    if (th.textContent == "") th.textContent = i + 1;
-    trBody.appendChild(th);
+TableBody(users);
+function TableBody(sortArr) {
+  for (let i = 0; i < sortArr.length; i++) {
+    let trBody = document.createElement("tr");
+    for (let z = 0; z < Object.keys(th_list).length; z++) {
+      let currentUser = sortArr[i];
+      let th = document.createElement("th");
+      // console.log(currentUser["name"]);
+      th.textContent = currentUser[keyObjList[z]];
+      th.classList.add("colum_num_" + z);
+      if (th.textContent == "") th.textContent = i + 1;
+      trBody.appendChild(th);
+    }
+    table.appendChild(trBody);
   }
-  table.appendChild(trBody);
 }
 
 /* Insert fragment go HTML */
-document.body.appendChild(headerTable);
+document.body.appendChild(wrapTableBody);
 
-// console.log(users.length);
+/* Create Total Balance DIV*/
+let divTotalBalance = document.createElement("div");
+divTotalBalance.classList.add("divTotalBalance");
+let totalBalance = document.getElementsByClassName("colum_num_3");
+let digitTotalBalance = function() {
+  let res = 0;
+  for (let i = 1; i < totalBalance.length; i++) {
+    res += parseFloat(totalBalance[i].innerHTML);
+  }
+  return res;
+};
+/* Fill Total Balance DIV */
+divTotalBalance.innerHTML = "Total balance: " + "<span>" + digitTotalBalance();
+
+/* Insert total balance DIV */
+document.body.appendChild(divTotalBalance);

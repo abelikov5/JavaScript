@@ -1,0 +1,23 @@
+* {
+  font-family: "Roboto", sans-serif;
+  font-weight: 100;
+}
+
+table {
+  width: 800px;
+  text-align: left;
+  margin: 0 auto;
+}
+.trHeader th {
+  /* text-align: center; */
+  font-weight: 400;
+}
+
+.divTotalBalance {
+  width: 600px;
+  margin: 0 auto;
+  text-align: right;
+}
+.divTotalBalance span {
+  font-weight: 400;
+}
